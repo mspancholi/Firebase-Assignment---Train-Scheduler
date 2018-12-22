@@ -13,17 +13,17 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-// 2. Button for adding Employees
+//  Button for adding trains
 $("#add-train-btn").on("click", function (event) {
     event.preventDefault();
 
-    // Grabs user input
+    // Grabing user input and triming
     var trainName = $("#train-name-input").val().trim();
     var destination = $("#destination-input").val().trim();
     var firstTrainStart = moment($("#start-input").val().trim(), "HH:mm A").format("X");
     var frequency = $("#frequency-input").val().trim();
 
-    // Creates local "temporary" object for holding employee data
+    // Creates local "temporary" object for holding train data
     var newTrain = {
         trainName: trainName,
         destination: destination,
@@ -49,23 +49,24 @@ $("#add-train-btn").on("click", function (event) {
     $("#frequency-input").val("");
 });
 
-// 3. Create Firebase event for adding employee to the database and a row in the html when a user adds an entry
+//  This (below) creates Firebase event for adding trains to the database and a row in the html when a user adds an entry
 database.ref().on("child_added", function (childSnapshot) {
     console.log(childSnapshot.val());
 
-    // Store everything into a variable.
+    // Stores (below) everything into a variable.
     var trainName = childSnapshot.val().trainName;
     var destination = childSnapshot.val().destination;
     var firstTrainStart = childSnapshot.val().firstTrainStart;
     var frequency = childSnapshot.val().frequency;
 
-    // Employee Info
+    // Train Info log
     console.log(trainName);
     console.log(destination);
     console.log(firstTrainStart);
     console.log(frequency);
    
-
+    // using moment to get the first train time
+    
     var newfirstTrainStart = moment(firstTrainStart, "HH:mm").subtract(1, "years");
     console.log(newfirstTrainStart);
 
@@ -82,7 +83,7 @@ database.ref().on("child_added", function (childSnapshot) {
     console.log("ARRIVAL TIME: " + moment(nextTrainTime).format("hh:mm A"));
 
 
-    // Create the new row
+    // Below creates the new row
     var newRow = $("<tr>").append(
         $("<td>").text(trainName),
         $("<td>").text(destination),
@@ -92,7 +93,7 @@ database.ref().on("child_added", function (childSnapshot) {
 
     );
 
-    // Append the new row to the table
+    // Below appends the new row to the table
     $("#train-table > tbody").append(newRow);
 });
 
