@@ -31,7 +31,7 @@ $("#add-train-btn").on("click", function (event) {
         frequency: frequency
     };
 
-    // Uploads employee data to the database
+    // Uploads trains data to the database
     database.ref().push(newTrain);
 
     // Logs everything to console
